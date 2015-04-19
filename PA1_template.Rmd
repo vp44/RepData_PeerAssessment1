@@ -27,16 +27,19 @@ hist(z,20,freq=TRUE)
 
 The Mean of the number of steps is below
 ```{r}
+orig_mean<-mean(z)
 mean(z)
 ```
 
 Median is:
 ```{r}
+orig_median<-median(z)
 median(z)
 ```
 ## What is the average daily activity pattern?
 
-The activity pattern looks as follows:
+We do not plot agains the interval variable as this is not uniformly spaced, instead we plot agains the index, which ranges from 0 to 288 in the order of 0 to 2355. The activity pattern looks as follows:
+
 ```{r}
 z<-tapply(activity_clean$steps,activity_clean$interval,sum)
 plot(z,type='l')
@@ -55,7 +58,8 @@ We compute the missing values based on the median data. The number of missing va
 sum(is.na(activity$steps))
 ```
 
-We store the median from the clean data source for the 5 minute interval and look up as necessary.
+We store the median from the clean data source for the 5 minute interval and look up as necessary. So whenever we encounter a missing value for an interval we look it up from the clean table.
+
 ```{r}
 z<-tapply(activity_clean$steps,activity_clean$interval,median)
 activity_patch<-ddply(activity,.(date,interval),mutate,new_steps=if(is.na(steps)) as.numeric(z[toString(interval)]) else steps)
@@ -68,10 +72,22 @@ Mean is
 mean(z)
 ```
 
+Impact of Imputing the values for mean is:
+```{r}
+mean(z)-orig_mean
+```
+
 Median is
 ```{r}
 median(z)
 ```
+
+Impact of Imputing the values for median is:
+```{r}
+median(z)-orig_median
+```
+
+From our assumptions, it seems that ignoring the missing values overestimates the mean and the median of the numbero of steps.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 ```{r}
@@ -84,6 +100,6 @@ Plot is below. There are differences in activity patterns. As you can wee there 
 
 ```{r,fig.width=8,fig.height=10}
 par(mfrow=c(2,1))
-plot(activity_weekdays[activity_weekdays$weekdayinfo==FALSE,][,c("new_interval","total")], main="Weekend")
-plot(activity_weekdays[activity_weekdays$weekdayinfo==TRUE,][,c("new_interval","total")], main="Weekday")
+plot(activity_weekdays[activity_weekdays$weekdayinfo==FALSE,][,c("new_interval","total")], main="Weekend",type='l')
+plot(activity_weekdays[activity_weekdays$weekdayinfo==TRUE,][,c("new_interval","total")], main="Weekday",type='l')
 ```
