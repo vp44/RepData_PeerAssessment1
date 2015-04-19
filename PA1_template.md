@@ -40,6 +40,7 @@ hist(z,20,freq=TRUE)
 The Mean of the number of steps is below
 
 ```r
+orig_mean<-mean(z)
 mean(z)
 ```
 
@@ -50,6 +51,7 @@ mean(z)
 Median is:
 
 ```r
+orig_median<-median(z)
 median(z)
 ```
 
@@ -58,7 +60,8 @@ median(z)
 ```
 ## What is the average daily activity pattern?
 
-The activity pattern looks as follows:
+We do not plot agains the interval variable as this is not uniformly spaced, instead we plot agains the index, which ranges from 0 to 288 in the order of 0 to 2355. The activity pattern looks as follows:
+
 
 ```r
 z<-tapply(activity_clean$steps,activity_clean$interval,sum)
@@ -90,7 +93,8 @@ sum(is.na(activity$steps))
 ## [1] 2304
 ```
 
-We store the median from the clean data source for the 5 minute interval and look up as necessary.
+We store the median from the clean data source for the 5 minute interval and look up as necessary. So whenever we encounter a missing value for an interval we look it up from the clean table.
+
 
 ```r
 z<-tapply(activity_clean$steps,activity_clean$interval,median)
@@ -111,6 +115,16 @@ mean(z)
 ## [1] 9503.869
 ```
 
+Impact of Imputing the values for mean is:
+
+```r
+mean(z)-orig_mean
+```
+
+```
+## [1] -1262.32
+```
+
 Median is
 
 ```r
@@ -120,6 +134,18 @@ median(z)
 ```
 ## [1] 10395
 ```
+
+Impact of Imputing the values for median is:
+
+```r
+median(z)-orig_median
+```
+
+```
+## [1] -370
+```
+
+From our assumptions, it seems that ignoring the missing values overestimates the mean and the median of the numbero of steps.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -138,4 +164,4 @@ plot(activity_weekdays[activity_weekdays$weekdayinfo==FALSE,][,c("new_interval",
 plot(activity_weekdays[activity_weekdays$weekdayinfo==TRUE,][,c("new_interval","total")], main="Weekday",type='l')
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 
+![](PA1_template_files/figure-html/unnamed-chunk-14-1.png) 
