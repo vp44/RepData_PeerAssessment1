@@ -134,8 +134,8 @@ Plot is below. There are differences in activity patterns. As you can wee there 
 
 ```r
 par(mfrow=c(2,1))
-plot(activity_weekdays[activity_weekdays$weekdayinfo==FALSE,][,c("new_interval","total")], main="Weekend")
-plot(activity_weekdays[activity_weekdays$weekdayinfo==TRUE,][,c("new_interval","total")], main="Weekday")
+plot(activity_weekdays[activity_weekdays$weekdayinfo==FALSE,][,c("new_interval","total")], main="Weekend",type='l')
+plot(activity_weekdays[activity_weekdays$weekdayinfo==TRUE,][,c("new_interval","total")], main="Weekday",type='l')
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-12-1.png) 
